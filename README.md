@@ -97,7 +97,7 @@ Found 5 product(s).
 [2/5] Generating description for 'EcoBreeze Water Bottle'...
   → Stay hydrated and help the planet with the EcoBreeze Water Bottle,
     crafted from recycled stainless steel in a stunning ocean-blue
-    finish. Durable, lightweight, and 100 % eco-friendly — the perfect
+    finish. Durable, lightweight, and 100% eco-friendly — the perfect
     companion for conscious consumers on the go.
 ```
 

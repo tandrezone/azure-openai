@@ -101,7 +101,7 @@ def generate_description(client: AzureOpenAI, deployment: str, product: dict[str
         temperature=0.7,
         max_tokens=256,
     )
-    return response.choices[0].message.content.strip()
+    return (response.choices[0].message.content or "").strip()
 
 
 def save_results(filepath: str, products: list[dict[str, str]], descriptions: list[str]) -> None:
@@ -170,7 +170,7 @@ def main() -> None:
     # ── Generate descriptions ──────────────────────────────────────────
     descriptions: list[str] = []
     for i, product in enumerate(products, start=1):
-        name = product.get("Product Name", product.get(list(product.keys())[0], f"Product {i}"))
+        name = product.get("Product Name") or next(iter(product.values()), f"Product {i}")
         print(f"[{i}/{len(products)}] Generating description for '{name}'...")
         description = generate_description(client, deployment, product)
         descriptions.append(description)
