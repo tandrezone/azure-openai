@@ -1,108 +1,62 @@
 # azure-openai
 
-A PHP package to interact with the [Azure OpenAI Service](https://learn.microsoft.com/en-us/azure/ai-services/openai/) using [openai-php/client](https://github.com/openai-php/client).
+A collection of examples for working with the [Azure OpenAI Service](https://learn.microsoft.com/en-us/azure/ai-services/openai/).
 
-## Requirements
+## Prerequisites
 
-- PHP 8.2+
-- An [Azure OpenAI resource](https://portal.azure.com/) with a deployed model
+- Python 3.10+
+- An Azure subscription with an [Azure OpenAI resource](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource)
+- A deployed model (e.g. `gpt-4o`)
 
-## Installation
+## Quick Start
 
-```bash
-composer require tandrezone/azure-openai
+1. **Install dependencies**
+
+   ```bash
+   pip install -r examples/requirements.txt
+   ```
+
+2. **Set environment variables**
+
+   ```bash
+   export AZURE_OPENAI_ENDPOINT="https://<your-resource>.openai.azure.com/"
+   export AZURE_OPENAI_API_KEY="<your-api-key>"
+   export AZURE_OPENAI_DEPLOYMENT_NAME="<your-deployment-name>"
+   ```
+
+3. **Run the example**
+
+   ```bash
+   python examples/chat_completion.py
+   ```
+
+## Examples
+
+| Example | Description |
+| --- | --- |
+| [Chat Completion](examples/chat_completion.py) | Send a chat prompt to Azure OpenAI and display the response |
+
+## Example Output
+
 ```
+Sending request to deployment 'gpt-4o'...
 
-## Usage
+Response:
 
-### Creating a client
+1. **Enterprise-Grade Security** – Azure OpenAI runs within your Azure
+   subscription, giving you full control over networking, access, and
+   data residency.
 
-```php
-use Tandrezone\AzureOpenAI\AzureOpenAI;
+2. **Responsible AI** – Built-in content filtering and abuse monitoring
+   help you deploy AI responsibly.
 
-$client = AzureOpenAI::client(
-    resourceName: 'your-resource-name',    // Azure resource subdomain
-    deploymentId: 'gpt-35-turbo',          // Your deployed model name
-    apiKey:       getenv('AZURE_OPENAI_API_KEY'),
-    apiVersion:   '2024-02-01',            // Optional, defaults to '2024-02-01'
-);
-```
+3. **Seamless Integration** – Tight integration with other Azure services
+   (e.g. Azure AI Search, Azure Functions) makes it easy to build
+   end-to-end solutions.
 
-This configures the underlying `openai-php/client` to point at:
-
-```
-https://{resourceName}.openai.azure.com/openai/deployments/{deploymentId}/
-```
-
-…and adds the required `api-key` header and `api-version` query parameter automatically.
-
-### Chat completions
-
-Since the deployment ID is already embedded in the base URI, you **do not** need to specify a model in API calls:
-
-```php
-$response = $client->chat()->create([
-    'messages' => [
-        ['role' => 'user', 'content' => 'Hello, world!'],
-    ],
-]);
-
-echo $response->choices[0]->message->content;
-```
-
-### Embeddings
-
-```php
-$response = $client->embeddings()->create([
-    'input' => 'The food was delicious.',
-]);
-
-echo $response->embeddings[0]->embedding[0]; // float
-```
-
-### Completions (legacy)
-
-```php
-$response = $client->completions()->create([
-    'prompt'     => 'PHP is',
-    'max_tokens' => 100,
-]);
-
-echo $response->choices[0]->text;
-```
-
-### Using a custom HTTP client
-
-Pass any [PSR-18](https://www.php-fig.org/psr/psr-18/) compatible HTTP client as the fifth argument:
-
-```php
-use GuzzleHttp\Client as GuzzleClient;
-
-$client = AzureOpenAI::client(
-    resourceName: 'your-resource-name',
-    deploymentId: 'gpt-35-turbo',
-    apiKey:       getenv('AZURE_OPENAI_API_KEY'),
-    apiVersion:   '2024-02-01',
-    httpClient:   new GuzzleClient(),
-);
-```
-
-## Configuration reference
-
-| Parameter      | Type                  | Required | Default        | Description                                        |
-|----------------|-----------------------|----------|----------------|----------------------------------------------------|
-| `resourceName` | `string`              | ✅        | —              | Azure OpenAI resource name (subdomain)             |
-| `deploymentId` | `string`              | ✅        | —              | Model deployment name                              |
-| `apiKey`       | `string`              | ✅        | —              | Azure OpenAI API key                               |
-| `apiVersion`   | `string`              | ❌        | `2024-02-01`   | Azure OpenAI REST API version                      |
-| `httpClient`   | `ClientInterface\|null` | ❌      | `null` (auto)  | PSR-18 HTTP client; auto-discovered when `null`    |
-
-## Testing
-
-```bash
-composer test
+Tokens used — prompt: 26, completion: 95, total: 121
 ```
 
 ## License
 
-MIT
+This project is provided as-is for educational purposes.
