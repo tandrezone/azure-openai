@@ -87,13 +87,23 @@ if (count($rows) < 2) {
     exit(1);
 }
 
-$headers  = array_map('trim', array_filter($rows[0], fn ($h) => $h !== null && trim((string) $h) !== ''));
+$headerRow = $rows[0];
+$headerIndices = [];
+$headers = [];
+
+foreach ($headerRow as $i => $h) {
+    if ($h !== null && trim((string) $h) !== '') {
+        $headerIndices[] = $i;
+        $headers[] = trim((string) $h);
+    }
+}
+
 $products = [];
 
 foreach (array_slice($rows, 1) as $row) {
     $product = [];
-    foreach ($headers as $i => $header) {
-        $product[$header] = isset($row[$i]) ? trim((string) $row[$i]) : '';
+    foreach ($headerIndices as $j => $i) {
+        $product[$headers[$j]] = isset($row[$i]) ? trim((string) $row[$i]) : '';
     }
     if (array_filter($product)) {
         $products[] = $product;
@@ -111,10 +121,10 @@ foreach ($products as $index => $product) {
     $name = $product['Product Name'] ?? array_values($product)[0] ?? 'Product ' . ($index + 1);
     echo sprintf("[%d/%d] Generating description for '%s'...\n", $index + 1, $total, $name);
 
+    $filtered = array_filter($product, fn (string $value) => $value !== '');
     $attributes = implode("\n", array_map(
-        fn (string $key, string $value) => "- {$key}: {$value}",
-        array_keys($product),
-        array_values($product),
+        fn (string $key) => "- {$key}: {$filtered[$key]}",
+        array_keys($filtered),
     ));
 
     $prompt = "Based on the following product attributes, write a short, compelling "
