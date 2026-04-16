@@ -1,46 +1,62 @@
 # azure-openai
 
-A collection of examples for working with the [Azure OpenAI Service](https://learn.microsoft.com/en-us/azure/ai-services/openai/).
+A PHP package to interact with the [Azure OpenAI Service](https://learn.microsoft.com/en-us/azure/ai-services/openai/) using [openai-php/client](https://github.com/openai-php/client).
 
 ## Prerequisites
 
-- Python 3.10+
+- PHP 8.2+
+- Composer
 - An Azure subscription with an [Azure OpenAI resource](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/create-resource)
 - A deployed model (e.g. `gpt-4o`)
+
+## Installation
+
+```bash
+composer require tandrezone/azure-openai
+```
 
 ## Quick Start
 
 1. **Install dependencies**
 
    ```bash
-   pip install -r examples/requirements.txt
+   composer install
    ```
 
-2. **Set environment variables**
+2. **Configure environment variables**
+
+   Copy the example `.env` file and fill in your Azure OpenAI credentials:
 
    ```bash
-   export AZURE_OPENAI_ENDPOINT="https://<your-resource>.openai.azure.com/"
-   export AZURE_OPENAI_API_KEY="<your-api-key>"
-   export AZURE_OPENAI_DEPLOYMENT_NAME="<your-deployment-name>"
+   cp examples/.env.example examples/.env
+   ```
+
+   Edit `examples/.env` with your values:
+
+   ```dotenv
+   AZURE_OPENAI_RESOURCE_NAME=your-resource-name
+   AZURE_OPENAI_DEPLOYMENT_ID=gpt-4o
+   AZURE_OPENAI_API_KEY=your-api-key
+   AZURE_OPENAI_API_VERSION=2024-02-01
    ```
 
 3. **Run the example**
 
    ```bash
-   python examples/chat_completion.py
+   php examples/chat_completion.php
    ```
 
 ## Examples
 
 | Example | Description |
 | --- | --- |
-| [Chat Completion](examples/chat_completion.py) | Send a chat prompt to Azure OpenAI and display the response |
-| [Excel Product Description](examples/excel_product_description.py) | Read product data from an Excel file and generate marketing descriptions |
+| [Chat Completion](examples/chat_completion.php) | Send a chat prompt to Azure OpenAI and display the response |
+| [Excel Product Description](examples/excel_product_description.php) | Read product data from an Excel file and generate marketing descriptions |
 
 ### Chat Completion
 
 ```bash
-python examples/chat_completion.py
+php examples/chat_completion.php
 ```
 
 #### Example Output
@@ -75,10 +91,10 @@ started quickly.
 
 ```bash
 # Print descriptions to the console
-python examples/excel_product_description.py examples/sample_products.xlsx
+php examples/excel_product_description.php examples/sample_products.xlsx
 
 # Save results to a new Excel file
-python examples/excel_product_description.py examples/sample_products.xlsx --output descriptions.xlsx
+php examples/excel_product_description.php examples/sample_products.xlsx --output descriptions.xlsx
 ```
 
 #### Example Output
